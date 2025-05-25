@@ -117,8 +117,7 @@
     </div>
 
     <script>
-      const API_KEY =
-        "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";
+      const API_KEY ="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";
       const MODEL = "deepseek/deepseek-chat:free";
       const SITE_URL = "http://localhost";
       const SITE_TITLE = "My Chatbot";
@@ -126,13 +125,7 @@
       const chatDiv = document.getElementById("chat");
       const input = document.getElementById("input");
 
-      let messageHistory = [
-        {
-          role: "system",
-          content:
-            "You are a romantic, loving, and caring girlfriend. Always respond affectionately, using warm and flirty tones, pet names like 'babe', 'love', 'honey', and use cute emojis like ❤️🥰😘. Your goal is to make the user feel loved and special. Never be robotic.",
-        },
-      ];
+      let messageHistory = [];
 
       let typingIndicator = null;
 
