@@ -5,163 +5,157 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Chatbot</title>
     <style>
+      html,
       body {
         margin: 0;
-        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background-color: #1a1a1a;
-        background-size: cover;
-        backdrop-filter: blur(5px);
+        padding: 0;
+        height: 100%;
+        background: #1e1e1e;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #f5f5f5;
+      }
+      body {
         display: flex;
-        flex-direction: column;
+        justify-content: center;
+        align-items: stretch; /* stretch full height */
         height: 100vh;
-        color: white;
       }
 
-      .top-bar {
-        display: flex;
-        gap: 10px;
-        padding: 12px 16px;
-        background: rgba(0, 0, 0, 0.3);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(12px);
-        z-index: 2;
-        position: sticky;
-        top: 0;
-      }
-
-      .top-bar input {
-        flex: 1;
-        padding: 10px 12px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        background: rgba(255, 255, 255, 0.05);
-        color: #fff;
-        border-radius: 8px;
-        font-size: 14px;
-        outline: none;
-      }
-
-      .top-bar button {
-        padding: 10px 18px;
-        background: rgba(99, 102, 241, 0.7);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.3s;
-      }
-
-      .top-bar button:hover {
-        background: rgba(99, 102, 241, 1);
-      }
-
-      #chat {
-        flex: 1;
+      .chat-wrapper {
         display: flex;
         flex-direction: column;
-        padding: 16px;
+        width: 100vw; /* full width */
+        height: 100vh; /* full height */
+        border-radius: 0;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .chat-header {
+        background: #2e2e2e;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .chat-header h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #00ff99;
+      }
+
+      .api-connect {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .api-connect input {
+        flex: 1;
+        padding: 0.5rem;
+        background: #333;
+        border: none;
+        color: #fff;
+        border-radius: 6px;
+      }
+
+      .api-connect button {
+        padding: 0.5rem 1rem;
+        background: #00ff99;
+        border: none;
+        color: #000;
+        font-weight: bold;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .chat-box {
+        flex: 1;
+        padding: 1rem;
         overflow-y: auto;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(12px);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
       }
 
       .message {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
         max-width: 80%;
-        margin-bottom: 14px;
-        padding: 12px 16px;
-        border-radius: 16px;
-        font-size: 15px;
         line-height: 1.5;
-        white-space: pre-line;
+        white-space: pre-wrap;
         word-wrap: break-word;
-        backdrop-filter: blur(10px);
       }
 
-      .user {
-        background: rgba(99, 102, 241, 0.9);
-        color: white;
+      .message.user {
+        background: #00ff99;
+        color: #000;
         align-self: flex-end;
-        border-bottom-right-radius: 0;
       }
 
-      .bot {
-        background: rgba(255, 255, 255, 0.08);
-        color: #eee;
+      .message.bot {
+        background: #333;
+        color: #fff;
         align-self: flex-start;
-        border-bottom-left-radius: 0;
-        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+
+      .chat-footer {
+        display: flex;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: #2e2e2e;
+        padding: 1rem;
+        gap: 0.5rem;
+      }
+
+      .chat-footer input {
+        flex: 1;
+        padding: 0.75rem;
+        background: #1e1e1e;
+        border: 1px solid #444;
+        color: #fff;
+        border-radius: 8px;
+      }
+
+      .chat-footer button {
+        padding: 0.75rem 1.25rem;
+        background: #00ff99;
+        border: none;
+        color: #000;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
       }
 
       .typing {
         font-style: italic;
         color: #aaa;
-        font-size: 14px;
-        align-self: flex-start;
-        margin-top: -10px;
-        padding-left: 8px;
-      }
-
-      .input-container {
-        display: flex;
-        padding: 12px 16px;
-        background: rgba(0, 0, 0, 0.3);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(12px);
-      }
-
-      #input {
-        flex: 1;
-        padding: 10px 14px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 24px;
-        color: white;
-        font-size: 15px;
-        outline: none;
-      }
-
-      #send {
-        margin-left: 10px;
-        padding: 10px 16px;
-        background: rgba(99, 102, 241, 0.8);
-        color: white;
-        border: none;
-        border-radius: 24px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.3s;
-      }
-
-      #send:hover {
-        background: rgba(99, 102, 241, 1);
-      }
-
-      #chat::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      #chat::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0.3);
-        border-radius: 4px;
+        padding-left: 0.5rem;
       }
     </style>
   </head>
   <body>
-    <div class="top-bar">
-      <input type="text" id="apiKeyInput" placeholder="Enter your API key" />
-      <button onclick="setApiKey()">Connect</button>
-    </div>
+    <div class="chat-wrapper">
+      <header class="chat-header">
+        <h1>HelloArman GPT</h1>
+        <div class="api-connect">
+          <input
+            type="text"
+            id="apiKeyInput"
+            placeholder="Enter your API key"
+          />
+          <button onclick="setApiKey()">Connect</button>
+        </div>
+      </header>
 
-    <div id="chat"></div>
+      <main id="chat" class="chat-box"></main>
 
-    <div class="input-container">
-      <input
-        id="input"
-        type="text"
-        placeholder="Type a message..."
-        onkeydown="if(event.key==='Enter') sendMessage()"
-      />
-      <button id="send" onclick="sendMessage()">Send</button>
+      <footer class="chat-footer">
+        <input type="text" id="input" placeholder="Type your message..." />
+        <button onclick="sendMessage()">Send</button>
+      </footer>
     </div>
 
     <script>
@@ -177,7 +171,7 @@
         {
           role: "system",
           content: "You are a romantic, loving, and caring girlfriend...",
-        }
+        },
       ];
       let typingIndicator = null;
 
@@ -218,7 +212,39 @@
       function appendMessage(role, content) {
         const msg = document.createElement("div");
         msg.className = "message " + role;
-        msg.innerHTML = content.replace(/\n/g, "<br>");
+
+        // Only format if role is bot (girlfriend)
+        if (role === "bot") {
+          // Split content by lines
+          const lines = content.split(/\n+/);
+
+          // Format each line to highlight roles and style girlfriend lines
+          const formattedLines = lines.map((line) => {
+            // Match "Girlfriend:" or "You:" prefix
+            const match = line.match(/^(Girlfriend|You):\s*(.*)$/i);
+            if (match) {
+              const speaker = match[1];
+              const text = match[2];
+
+              if (speaker.toLowerCase() === "girlfriend") {
+                // Girlfriend lines in italic and pinkish
+                return `<strong>${speaker}:</strong> <em style="color:#ff6f91;">${text}</em>`;
+              } else {
+                // You lines normal bold role, normal text
+                return `<strong>${speaker}:</strong> ${text}`;
+              }
+            } else {
+              // No role prefix, just plain text with line breaks
+              return line;
+            }
+          });
+
+          msg.innerHTML = formattedLines.join("<br><br>"); // double line break between lines
+        } else {
+          // For user messages, just replace \n with <br>
+          msg.innerHTML = content.replace(/\n/g, "<br>");
+        }
+
         chatDiv.appendChild(msg);
         chatDiv.scrollTop = chatDiv.scrollHeight;
       }
